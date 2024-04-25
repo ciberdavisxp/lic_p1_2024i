@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATM Interface</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css"> <!-- Enlace al archivo CSS externo -->
+    <link rel="stylesheet" href="css/style.css"> 
+    <script src="js/script.js" defer></script>
+    <script src="js/balance.js" defer></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="content">
@@ -14,6 +21,7 @@
                 <img src="img/logo_pokemon_atm.png" alt="PokemonBank Logo">
                 <span class="logo-text">PokemonBank</span>
             </div>
+            <div><span id="cuenta">Cuenta #0078962486</span><p>Balance: $<span id="balance"></span></p></div>
             <div class="welcome">
                 <img src="img/user.png" alt="User Icon">
                 <span>Bienvenido David</span>
@@ -22,43 +30,110 @@
                     Salida
                 </div>
             </div>
+
         </div>
-        <div class="button-grid" onmouseleave="setDefaultImage()">
+        <div class="button-grid">
             <button class="btn btn-primary atm-button" onmouseover="showImage('retiro')">Retiro</button>
             <button class="btn btn-primary atm-button" onmouseover="showImage('deposito')">Depósito</button>
             <button class="btn btn-primary atm-button" onmouseover="showImage('consulta')">Consulta</button>
             <button class="btn btn-primary atm-button" onmouseover="showImage('pagos')">Pagos</button>
         </div>
-        <img id="infoImage" src="img/movimientos.png" alt="Movimientos" class="info-image show">
+        <div class="image-action-container">
+            <img id="infoImage" src="img/movimientos.png" alt="Movimientos" class="info-image show">
+            <div class="action-label action-h" id="action" style="display: block;">
+                <label>Selecciona una operación</label>
+            </div>
+            <div class="action-label action-h" id="retiro">
+                <label>Retiro</label>
+                Cantidad a retirar:
+                <input type="text" id="iretiro" class="form-text" placeholder="$ 0.00">
+                <input type="checkbox" id="imprimirretiro" class="form-check-input"><label>Imprimir recibo?</label>
+                <br><button id="" class="btn btn-secondary" onclick="toggleDivVisibility(this, 'action'); realizarRetiro();">Retirar</button>
+            </div>
+            <div class="action-label action-h" id="deposito">
+                <label>Depósito</label>
+                Cantidad a depositar:
+                <input type="text" id="ideposito" class="form-text" placeholder="$ 0.00">
+                <input type="checkbox" id="imprimirdeposito" class="form-check-input"><label>Imprimir recibo?</label>
+                <br><button class="btn btn-secondary" onclick="toggleDivVisibility(this, 'action'); realizarDeposito();">Depositar</button>
+            </div>
+            <div class="action-label action-h" id="consulta">
+                <label>Consulta</label>
+                Balance actual: $<span id="balance2"></span><br>
+                <div id="contenedorb">
+                    <div id="tx1">
+                        Transacciones:<br>
+                        <div id="transacciones2" class="transacciones"></div>
+                    </div>
+                    <div id="tx2">
+                        Gráfico:<br>
+                        <div id="transacciones3" class="transacciones"><canvas id="transactionsChart"></canvas>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const ctx = document.getElementById('transactionsChart').getContext('2d');
+                                    const transactionsChart = new Chart(ctx, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: ["Transacción 1", "Transacción 2", "Transacción 3"],
+                                            datasets: [{
+                                                label: 'Monto ($)',
+                                                data: [200, 450, 300],
+                                                backgroundColor: [
+                                                    'rgba(255, 99, 132, 0.2)',
+                                                    'rgba(54, 162, 235, 0.2)',
+                                                    'rgba(255, 206, 86, 0.2)'
+                                                ],
+                                                borderColor: [
+                                                    'rgba(255, 99, 132, 1)',
+                                                    'rgba(54, 162, 235, 1)',
+                                                    'rgba(255, 206, 86, 1)'
+                                                ],
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            },
+                                            plugins: {
+                                                legend: {
+                                                    display: true,
+                                                    position: 'top'
+                                                }
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <br><button class="btn btn-secondary" onclick="toggleDivVisibility(this, 'action')">Finalizar</button>
+                <button class="btn btn-secondary" onclick="consultageneral();">Generar PDF</button>
+                <script>
+
+</script>
+                <button class="btn btn-secondary consulta2">Gráfico&#10132;</button>
+            </div>
+            <div class="action-label action-h" id="pagos">
+                <label>Pago</label>
+                Ingrese NPE:
+                <div class="opcionespago"><input type="number" id="inpe" class="form-text" placeholder="8 dígitos del NPE" maxlength="8" min="0">
+                <select id="spagar">
+                    <option value="Energía Eléctrica">Energía Eléctrica</option>
+                    <option value="Internet">Internet</option>
+                    <option value="Telefonía">Telefonía</option>
+                    <option value="Agua Potable">Agua Potable</option>
+                </select></div>
+                <br>Ingrese el monto a abonar: 
+                <input type="text" id="ipagar" class="form-text" placeholder="$ 0.00">
+                <input type="checkbox" id="imprimirpago" class="form-check-input"><label>Imprimir recibo?</label>
+                <br><button class="btn btn-secondary" onclick="toggleDivVisibility(this, 'action'); realizarPago();">Pagar</button>
+            </div>
+        </div>
     </div>
-
-    <script>
-        function showImage(type) {
-            var imagePath = '';
-            switch (type) {
-                case 'retiro':
-                    imagePath = 'img/retiro.png';
-                    break;
-                case 'deposito':
-                    imagePath = 'img/deposito.png';
-                    break;
-                case 'consulta':
-                    imagePath = 'img/consulta.png';
-                    break;
-                case 'pagos':
-                    imagePath = 'img/pagos.png';
-                    break;
-            }
-            var imgElement = document.getElementById('infoImage');
-            imgElement.src = imagePath;
-            imgElement.classList.add('show');
-        }
-
-        function setDefaultImage() {
-            var imgElement = document.getElementById('infoImage');
-            imgElement.src = 'img/movimientos.png';
-            imgElement.classList.add('show');
-        }
-    </script>
+<div id="transacciones1" class="transacciones"></div>
 </body>
 </html>

@@ -81,3 +81,80 @@ body {
 .show {
     opacity: 1;
 }
+.image-action-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.info-image {
+    width: 100%;
+    max-width: 300px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.show {
+    opacity: 1;
+}
+
+.action-label {
+    border: 2px solid #ccc;
+    padding: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+    width: 100%;
+}
+
+.action-h {
+    display: none;
+}
+
+label{
+    font-weight: bold;
+    display: block;
+}
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+#transacciones1{
+    display: none;
+}
+#transacciones2, #transacciones3 {
+    max-height: 85px; /* Establece la altura máxima del div */
+    overflow-y: auto;  /* Habilita el desplazamiento vertical cuando sea necesario */
+    border: 1px solid #ccc; /* Opcional: añade un borde para visualizar claramente el área */
+    padding: 5px; /* Opcional: añade algo de padding para no pegar el texto a los bordes */
+    margin-top: 10px; /* Opcional: espacio antes del div */
+}
+
+.opcionespago{
+    display: flex;
+}
+
+#contenedorb {
+    display: flex;
+    justify-content: space-between;
+}
+
+#tx1, #tx2 {
+    flex: 1;
+    padding: 10px;
+}
+
+#tx2 {
+    display: none; /* Ocultar tx2 inicialmente */
+}
