@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Interface</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> <!-- Enlace al archivo CSS externo -->
+</head>
+<body>
+    <div class="content">
+        <div class="header">
+            <div class="logo">
+                <img src="img/logo_pokemon_atm.png" alt="PokemonBank Logo">
+                <span class="logo-text">PokemonBank</span>
+            </div>
+            <div class="welcome">
+                <img src="img/user.png" alt="User Icon">
+                <span>Bienvenido David</span>
+                <div class="logout" onclick="location.href='index.html'">
+                    <img src="img/exit.png" alt="Salir">
+                    Salida
+                </div>
+            </div>
+        </div>
+        <div class="button-grid" onmouseleave="setDefaultImage()">
+            <button class="btn btn-primary atm-button" onmouseover="showImage('retiro')">Retiro</button>
+            <button class="btn btn-primary atm-button" onmouseover="showImage('deposito')">Depósito</button>
+            <button class="btn btn-primary atm-button" onmouseover="showImage('consulta')">Consulta</button>
+            <button class="btn btn-primary atm-button" onmouseover="showImage('pagos')">Pagos</button>
+        </div>
+        <img id="infoImage" src="img/movimientos.png" alt="Movimientos" class="info-image show">
+    </div>
+
+    <script>
+        function showImage(type) {
+            var imagePath = '';
+            switch (type) {
+                case 'retiro':
+                    imagePath = 'img/retiro.png';
+                    break;
+                case 'deposito':
+                    imagePath = 'img/deposito.png';
+                    break;
+                case 'consulta':
+                    imagePath = 'img/consulta.png';
+                    break;
+                case 'pagos':
+                    imagePath = 'img/pagos.png';
+                    break;
+            }
+            var imgElement = document.getElementById('infoImage');
+            imgElement.src = imagePath;
+            imgElement.classList.add('show');
+        }
+
+        function setDefaultImage() {
+            var imgElement = document.getElementById('infoImage');
+            imgElement.src = 'img/movimientos.png';
+            imgElement.classList.add('show');
+        }
+    </script>
+</body>
+</html>

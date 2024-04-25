@@ -1,0 +1,83 @@
+body {
+    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.content {
+    width: 100%;
+    max-width: 800px;
+}
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.logo {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+.logo img {
+    height: 100%;
+}
+.logo-text {
+    margin-left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+.welcome {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    position: relative;
+}
+.welcome img {
+    margin-right: 10px;
+    height: 24px;
+}
+.welcome:hover .logout {
+    display: block;
+}
+.logout {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 25px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.logout img {
+    margin-right: 5px;
+    height: 20px;
+}
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.atm-button {
+    padding: 20px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+.info-image {
+    width: 100%;
+    max-width: 300px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    margin-top: 20px;
+}
+.show {
+    opacity: 1;
+}
