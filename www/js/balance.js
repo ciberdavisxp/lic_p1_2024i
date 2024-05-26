@@ -194,3 +194,6 @@ function printPago(amount) {
 
 
 actualizarUI(); 
+
+
+
