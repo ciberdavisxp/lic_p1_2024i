@@ -6,13 +6,20 @@
     <title>ATM Interface</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css"> 
-    <script src="js/script.js" defer></script>
-    <script src="js/balance.js" defer></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/balance.js" defer></script>
+    <style>
+        #transactionsChart {
+            width: 100% !important;
+            height: 400px !important;
+        }
+    </style>
 </head>
 <body>
     <div class="content">
@@ -30,7 +37,6 @@
                     Salida
                 </div>
             </div>
-
         </div>
         <div class="button-grid">
             <button class="btn btn-primary atm-button" onmouseover="showImage('retiro')">Retiro</button>
@@ -67,54 +73,13 @@
                     </div>
                     <div id="tx2">
                         Gráfico:<br>
-                        <div id="transacciones3" class="transacciones"><canvas id="transactionsChart"></canvas>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const ctx = document.getElementById('transactionsChart').getContext('2d');
-                                    const transactionsChart = new Chart(ctx, {
-                                        type: 'bar',
-                                        data: {
-                                            labels: ["Transacción 1", "Transacción 2", "Transacción 3"],
-                                            datasets: [{
-                                                label: 'Monto ($)',
-                                                data: [200, 450, 300],
-                                                backgroundColor: [
-                                                    'rgba(255, 99, 132, 0.2)',
-                                                    'rgba(54, 162, 235, 0.2)',
-                                                    'rgba(255, 206, 86, 0.2)'
-                                                ],
-                                                borderColor: [
-                                                    'rgba(255, 99, 132, 1)',
-                                                    'rgba(54, 162, 235, 1)',
-                                                    'rgba(255, 206, 86, 1)'
-                                                ],
-                                                borderWidth: 1
-                                            }]
-                                        },
-                                        options: {
-                                            scales: {
-                                                y: {
-                                                    beginAtZero: true
-                                                }
-                                            },
-                                            plugins: {
-                                                legend: {
-                                                    display: true,
-                                                    position: 'top'
-                                                }
-                                            }
-                                        }
-                                    });
-                                });
-                            </script>
+                        <div id="transacciones3" class="transacciones">
+                            <canvas id="transactionsChart" width="50px" height="50px"></canvas>
                         </div>
                     </div>
                 </div>
                 <br><button class="btn btn-secondary" onclick="toggleDivVisibility(this, 'action')">Finalizar</button>
                 <button class="btn btn-secondary" onclick="consultageneral();">Generar PDF</button>
-                <script>
-
-</script>
                 <button class="btn btn-secondary consulta2">Gráfico&#10132;</button>
             </div>
             <div class="action-label action-h" id="pagos">
@@ -134,7 +99,46 @@
             </div>
         </div>
     </div>
-<div id="transacciones1" class="transacciones"></div>
+    <div id="transacciones1" class="transacciones"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('transactionsChart').getContext('2d');
+            const transactionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: fechaarray,
+                    datasets: [{
+                        label: 'Monto ($)',
+                        data: transaccionarray,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-<!comentario>
+

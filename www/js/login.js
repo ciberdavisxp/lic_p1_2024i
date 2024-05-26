@@ -15,6 +15,4 @@ function validateLogin() {
                 return false;
             }
         }
-
-
         

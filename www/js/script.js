@@ -63,5 +63,3 @@ function toggleDivVisibility(buttonElement, divToShowId) {
 
 
 
-
-

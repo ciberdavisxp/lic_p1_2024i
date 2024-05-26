@@ -30,6 +30,7 @@ body {
     margin-left: 10px;
     font-size: 24px;
     font-weight: bold;
+    font-weight: bold;
     color: #333;
 }
 .welcome {
@@ -75,6 +76,7 @@ body {
     width: 100%;
     max-width: 300px;
     opacity: 0;
+    max-height: 300px;
     transition: opacity 0.5s ease;
     margin-top: 20px;
 }
@@ -134,7 +136,7 @@ input[type="number"] {
     display: none;
 }
 #transacciones2, #transacciones3 {
-    max-height: 85px; /* Establece la altura máxima del div */
+    max-height: 450px; /* Establece la altura máxima del div */
     overflow-y: auto;  /* Habilita el desplazamiento vertical cuando sea necesario */
     border: 1px solid #ccc; /* Opcional: añade un borde para visualizar claramente el área */
     padding: 5px; /* Opcional: añade algo de padding para no pegar el texto a los bordes */
@@ -158,5 +160,3 @@ input[type="number"] {
 #tx2 {
     display: none; /* Ocultar tx2 inicialmente */
 }
-
-

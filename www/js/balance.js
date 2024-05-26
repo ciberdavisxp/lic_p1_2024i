@@ -1,54 +1,114 @@
-let balance = 60; 
+let balance = 500;
+let fechaarray = [new Date(1716604880520).toLocaleString()];
+let transaccionarray = [500];
+
+const constraintsRetiroDeposito = {
+    cantidad: {
+        presence: {
+            message: "La cantidad es obligatoria"
+        },
+        numericality: {
+            greaterThan: 0,
+            message: "La cantidad debe ser un número mayor que cero"
+        }
+    }
+};
+
+const constraintsPago = {
+    cantidad: {
+        presence: {
+            message: "La cantidad es obligatoria"
+        },
+        numericality: {
+            greaterThan: 0,
+            message: "La cantidad debe ser un número mayor que cero"
+        }
+    },
+    npe: {
+        presence: {
+            message: "El NPE es obligatorio"
+        },
+        length: {
+            is: 8,
+            message: "El NPE debe tener exactamente 8 dígitos"
+        },
+        numericality: {
+            onlyInteger: true,
+            message: "El NPE debe ser un número entero"
+        }
+    }
+};
+
+
+function mostrarErrores(errors) {
+    const mensajes = [];
+    for (const key in errors) {
+        if (errors.hasOwnProperty(key)) {
+            mensajes.push(errors[key].join('. '));
+        }
+    }
+    return mensajes.join('. ');
+}
 
 function actualizarUI() {
+    // Mostrar balance
     document.getElementById('balance').textContent = balance;
     document.getElementById('balance2').textContent = balance;
 }
 
-
-
-
 function realizarRetiro() {
     const inputRetiro = document.getElementById('iretiro');
     const montoRetiro = parseFloat(inputRetiro.value);
-    if (montoRetiro > 0 && montoRetiro <= balance) {
+    const errors = validate({ cantidad: montoRetiro }, constraintsRetiroDeposito);
+
+    if (errors) {
+        swal("Error", mostrarErrores(errors), "error");
+        inputRetiro.value = '';
+        return;
+    }
+
+    if (montoRetiro <= balance) {
         balance -= montoRetiro;
+        transaccionarray.push(-montoRetiro);
         registrarTransaccion(montoRetiro, 'r');
+        const fechaHoy = Date.now();
+        const fechaLegible = new Date(fechaHoy).toLocaleString();
+        fechaarray.push(fechaLegible);
         actualizarUI();
-        swal("Retiro exitoso!","$" + montoRetiro + " retirados de tu cuenta.", "success");
+        swal("Retiro exitoso!", "$" + montoRetiro + " retirados de tu cuenta. Fecha y hora: " + fechaLegible, "success");
         if (document.getElementById('imprimirretiro').checked) {
-            printRetiro(montoRetiro);  
+            printRetiro(montoRetiro);
         }
     } else {
-        swal("Error","Monto de retiro inválido o saldo insuficiente.","error");
-        
+        swal("Error", "Saldo insuficiente.", "error");
     }
-    inputRetiro.value = ''; 
+    inputRetiro.value = '';
 }
-
-
-
 
 function realizarDeposito() {
     const inputDeposito = document.getElementById('ideposito');
     const montoDeposito = parseFloat(inputDeposito.value);
-    if (montoDeposito > 0) {
-        balance += montoDeposito;
-        registrarTransaccion(montoDeposito, 'd');
-        actualizarUI();
-        swal("Deposito","Fueron abonados $" + montoDeposito + " a tu cuenta.", "success");
-        if (document.getElementById('imprimirdeposito').checked) {
-            printDeposito(montoDeposito);  
-        }
-    } else {
-        swal("Error","Ingrese un monto válido para depositar.","error");
-        
+    const errors = validate({ cantidad: montoDeposito }, constraintsRetiroDeposito);
+
+    if (errors) {
+        swal("Error", mostrarErrores(errors), "error");
+        inputDeposito.value = '';
+        return;
     }
-    inputDeposito.value = ''; 
+
+    balance += montoDeposito;
+    transaccionarray.push(montoDeposito);
+    registrarTransaccion(montoDeposito, 'd');
+    const fechaHoy = Date.now();
+    const fechaLegible = new Date(fechaHoy).toLocaleString();
+    fechaarray.push(fechaLegible);
+    actualizarUI();
+    swal("Depósito exitoso!", "$" + montoDeposito + " abonados a tu cuenta. Fecha y hora: " + fechaLegible, "success");
+    if (document.getElementById('imprimirdeposito').checked) {
+        printDeposito(montoDeposito);
+    }
+    inputDeposito.value = '';
 }
-
-
-
 
 function realizarPago() {
     const inputNPE = document.getElementById('inpe');
@@ -56,20 +116,32 @@ function realizarPago() {
     const montoPagar = parseFloat(inputPagar.value);
     const servpagar = document.getElementById('spagar').value;
     const npe = inputNPE.value.trim();
-    if (!isNaN(montoPagar) && montoPagar > 0 && montoPagar <= balance) {
-        balance -= montoPagar;  
-        registrarTransaccionPago(montoPagar, npe);  
-        actualizarUI();  
-        swal("Pago de servicio exitoso!", "Factura de " + servpagar + " por $" + montoPagar + ".", "success");
+    const errors = validate({ cantidad: montoPagar, npe: npe }, constraintsPago);
+
+    if (errors) {
+        swal("Error", mostrarErrores(errors), "error");
+        inputNPE.value = '';
+        inputPagar.value = '';
+        return;
+    }
+
+    if (montoPagar <= balance) {
+        balance -= montoPagar;
+        transaccionarray.push(-montoPagar);
+        registrarTransaccionPago(montoPagar, npe);
+        const fechaHoy = Date.now();
+        const fechaLegible = new Date(fechaHoy).toLocaleString();
+        fechaarray.push(fechaLegible);
+        actualizarUI();
+        swal("Pago de servicio exitoso!", "Factura de " + servpagar + " por $" + montoPagar + ". Fecha y hora: " + fechaLegible, "success");
         if (document.getElementById('imprimirpago').checked) {
-            printPago(montoPagar);  
+            printPago(montoPagar);
         }
     } else {
-        swal("Error","Monto de pago inválido o saldo insuficiente.","error");
-        
+        swal("Error", "Saldo insuficiente.", "error");
     }
-    inputNPE.value = '';  
-    inputPagar.value = '';  
+    inputNPE.value = '';
+    inputPagar.value = '';
 }
 
 
@@ -194,6 +266,4 @@ function printPago(amount) {
 
 
 actualizarUI(); 
-
-
 
