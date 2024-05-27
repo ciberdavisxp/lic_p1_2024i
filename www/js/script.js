@@ -18,17 +18,20 @@ window.onload = function() {
 };
 
 // Manejar inicio de sesión
-function login(pin) {
+function login() {
+    const username = document.getElementById('username').value.trim();
+    const pin = document.getElementById('pin').value.trim();
     const users = JSON.parse(localStorage.getItem('users'));
-    const user = users.find(user => user.pin === pin);
+    const user = users.find(user => user.name === username && user.pin === pin);
 
     if (user) {
         localStorage.setItem('loggedInUser', JSON.stringify(user));
         window.location.href = 'atm.html';  // Redirigir a la página principal del usuario
     } else {
-        alert('PIN incorrecto');
+        swal('Error de ingreso!','Nombre de usuario o PIN incorrecto','error');
     }
 }
+
 
 // Mostrar imagen en la interfaz de usuario
 function showImage(type) {
