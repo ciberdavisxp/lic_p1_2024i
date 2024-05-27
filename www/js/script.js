@@ -1,31 +1,65 @@
+// Archivo: script.js
+
+// Inicializar datos de usuarios
+function initializeUsers() {
+    const users = [
+        { name: 'Alberto', pin: '2468', account: '2244668800', balance: 500.00, transacciones: [{"tipo":"deposito","monto":500,"fecha":"27/5/2024, 12:49:07 a. m.","npe":null,"servicio":null}] },
+        { name: 'David', pin: '4321', account: '1234567890', balance: 500.00, transacciones: [{"tipo":"deposito","monto":500,"fecha":"27/5/2024, 12:49:07 a. m.","npe":null,"servicio":null}] },
+        { name: 'Ash', pin: '1234', account: '0987654321', balance: 500.00, transacciones: [{"tipo":"deposito","monto":500,"fecha":"27/5/2024, 12:49:07 a. m.","npe":null,"servicio":null}] }
+    ];
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
+// Llamar a la función de inicialización al cargar la página
+window.onload = function() {
+    if (!localStorage.getItem('users')) {
+        initializeUsers();
+    }
+};
+
+// Manejar inicio de sesión
+function login(pin) {
+    const users = JSON.parse(localStorage.getItem('users'));
+    const user = users.find(user => user.pin === pin);
+
+    if (user) {
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+        window.location.href = 'atm.html';  // Redirigir a la página principal del usuario
+    } else {
+        alert('PIN incorrecto');
+    }
+}
+
+// Mostrar imagen en la interfaz de usuario
 function showImage(type) {
-            var imagePath = '';
-            switch (type) {
-                case 'retiro':
-                    imagePath = 'img/retiro.png';
-                    break;
-                case 'deposito':
-                    imagePath = 'img/deposito.png';
-                    break;
-                case 'consulta':
-                    imagePath = 'img/consulta.png';
-                    break;
-                case 'pagos':
-                    imagePath = 'img/pagos.png';
-                    break;
-            }
-            var imgElement = document.getElementById('infoImage');
-            imgElement.src = imagePath;
-            imgElement.classList.add('show');
-        }
+    var imagePath = '';
+    switch (type) {
+        case 'retiro':
+            imagePath = 'img/retiro.png';
+            break;
+        case 'deposito':
+            imagePath = 'img/deposito.png';
+            break;
+        case 'consulta':
+            imagePath = 'img/consulta.png';
+            break;
+        case 'pagos':
+            imagePath = 'img/pagos.png';
+            break;
+    }
+    var imgElement = document.getElementById('infoImage');
+    imgElement.src = imagePath;
+    imgElement.classList.add('show');
+}
 
-        function setDefaultImage() {
-            var imgElement = document.getElementById('infoImage');
-            imgElement.src = 'img/movimientos.png';
-            imgElement.classList.add('show');
-        }
+// Configurar imagen predeterminada
+function setDefaultImage() {
+    var imgElement = document.getElementById('infoImage');
+    imgElement.src = 'img/movimientos.png';
+    imgElement.classList.add('show');
+}
 
-
+// Mostrar y ocultar divisiones de acciones
 document.addEventListener('DOMContentLoaded', function() {
     const buttons = document.querySelectorAll('.atm-button');
     buttons.forEach(button => {
@@ -35,8 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
 
 function showActionDiv(action) {
     const actionDivs = document.querySelectorAll('.action-label.action-h');
@@ -49,17 +81,11 @@ function showActionDiv(action) {
     });
 }
 
-
-
 function toggleDivVisibility(buttonElement, divToShowId) {
-            // Ocultar la div del botón
-            buttonElement.closest('div').style.display = 'none';
+    // Ocultar la div del botón
+    buttonElement.closest('div').style.display = 'none';
 
-            // Mostrar la div específica por ID
-            const divToShow = document.getElementById(divToShowId);
-            divToShow.style.display = 'block';
-        }
-
-
-
-
+    // Mostrar la div específica por ID
+    const divToShow = document.getElementById(divToShowId);
+    divToShow.style.display = 'block';
+}
