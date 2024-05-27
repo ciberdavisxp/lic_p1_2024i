@@ -121,28 +121,6 @@
         }
     }
     </script>
-        <div>
-    <button onclick="refrescarLocalStorage()">Refrescar LocalStorage</button>
-    <div id="localStorageContent"></div>
-</div>
-
-<script>
-function refrescarLocalStorage() {
-    const localStorageContent = document.getElementById('localStorageContent');
-    localStorageContent.innerHTML = ''; // Limpiar contenido previo
-
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
-        localStorageContent.innerHTML += `<p><strong>${key}:</strong> ${value}</p>`;
-    }
-}
-
-// Llamar a la función al cargar la página para mostrar el contenido inicial
-document.addEventListener('DOMContentLoaded', function() {
-    refrescarLocalStorage();
-});
-</script>
 
 </body>
 </html>
