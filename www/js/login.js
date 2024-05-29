@@ -1,18 +1,21 @@
 function validateLogin() {
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
+    // Obtener valores de los campos de entrada
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
 
-            if (username === 'David' && password === '1234') {
-                swal("Bienvenido " + username, "Cargando procedimientos", "success");
-                //alert("Bienvenido!");
-                setTimeout(() => {
-                    window.location.href = 'atm.html';
-                },2000);
-                return false;
-            } else {
-                swal("Error!", "No es posible validar las credenciales ingresadas", "error");
-                //alert('Usuario o contraseña incorrectos. Intente de nuevo.');
-                return false;
-            }
-        }
+    // Validar credenciales
+    if (username === 'David' && password === '1234') {
+        // Mostrar mensaje de bienvenida
+        swal("Bienvenido " + username, "Cargando procedimientos", "success");
         
+        // Redirigir a la página principal después de 2 segundos
+        setTimeout(() => {
+            window.location.href = 'atm.html';
+        }, 2000);
+        return false;
+    } else {
+        // Mostrar mensaje de error
+        swal("Error!", "No es posible validar las credenciales ingresadas", "error");
+        return false;
+    }
+}

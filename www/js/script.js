@@ -32,7 +32,6 @@ function login() {
     }
 }
 
-
 // Mostrar imagen en la interfaz de usuario
 function showImage(type) {
     var imagePath = '';

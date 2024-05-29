@@ -1,63 +1,47 @@
-// Archivo: balance.js
-
 // Inicializar variables
 let balance = 500;
-let fechaarray = [new Date(1716604880520).toLocaleString()];
-let transaccionarray = [500];
+let fechaarray = [new Date(1716604880520).toLocaleString()]; // Array de fechas de transacciones
+let transaccionarray = [500]; // Array de montos de transacciones
 
+// Ejecutar cuando la página cargue
 window.onload = function() {
-    const user = JSON.parse(localStorage.getItem('loggedInUser'));
+    const user = JSON.parse(localStorage.getItem('loggedInUser')); // Obtener usuario logueado
     if (user) {
-        document.getElementById('user-name').innerText = user.name;
-        document.getElementById('account-number').innerText = user.account;
-        balance = user.balance; // Asegurarse de que el balance se actualice con el del usuario logueado
-        fechaarray = user.transacciones.map(trans => trans.fecha); // Extraer fechas de las transacciones
-        transaccionarray = user.transacciones.map(trans => trans.monto); // Extraer montos de las transacciones
-        actualizarUI(); // Actualizar la UI con el balance correcto
-        inicializarGrafico();
+        document.getElementById('user-name').innerText = user.name; // Mostrar nombre de usuario
+        document.getElementById('account-number').innerText = user.account; // Mostrar número de cuenta
+        balance = user.balance; // Actualizar balance con el del usuario logueado
+        fechaarray = user.transacciones.map(trans => trans.fecha); // Extraer fechas de transacciones
+        transaccionarray = user.transacciones.map(trans => trans.monto); // Extraer montos de transacciones
+        actualizarUI(); // Actualizar UI con el balance correcto
+        inicializarGrafico(); // Inicializar gráfico de transacciones
     } else {
         alert('No ha iniciado sesión');
         window.location.href = 'index.html';  // Redirigir al inicio de sesión si no hay usuario logueado
     }
 };
 
+// Validaciones para retiros y depósitos
 const constraintsRetiroDeposito = {
     cantidad: {
-        presence: {
-            message: "La cantidad es obligatoria"
-        },
-        numericality: {
-            greaterThan: 0,
-            message: "La cantidad debe ser un número mayor que cero"
-        }
+        presence: { message: "La cantidad es obligatoria" },
+        numericality: { greaterThan: 0, message: "La cantidad debe ser un número mayor que cero" }
     }
 };
 
+// Validaciones para pagos
 const constraintsPago = {
     cantidad: {
-        presence: {
-            message: "La cantidad es obligatoria"
-        },
-        numericality: {
-            greaterThan: 0,
-            message: "La cantidad debe ser un número mayor que cero"
-        }
+        presence: { message: "La cantidad es obligatoria" },
+        numericality: { greaterThan: 0, message: "La cantidad debe ser un número mayor que cero" }
     },
     npe: {
-        presence: {
-            message: "El NPE es obligatorio"
-        },
-        length: {
-            is: 8,
-            message: "El NPE debe tener exactamente 8 dígitos"
-        },
-        numericality: {
-            onlyInteger: true,
-            message: "El NPE debe ser un número entero"
-        }
+        presence: { message: "El NPE es obligatorio" },
+        length: { is: 8, message: "El NPE debe tener exactamente 8 dígitos" },
+        numericality: { onlyInteger: true, message: "El NPE debe ser un número entero" }
     }
 };
 
+// Mostrar mensajes de error
 function mostrarErrores(errors) {
     const mensajes = [];
     for (const key in errors) {
@@ -68,6 +52,7 @@ function mostrarErrores(errors) {
     return mensajes.join('. ');
 }
 
+// Actualizar la UI con el balance y las transacciones
 function actualizarUI() {
     const balanceElement1 = document.getElementById('balance');
     const balanceElement2 = document.getElementById('balance2');
@@ -96,6 +81,7 @@ function actualizarUI() {
     }
 }
 
+// Realizar un retiro
 function realizarRetiro() {
     const inputRetiro = document.getElementById('iretiro');
     const montoRetiro = parseFloat(inputRetiro.value);
@@ -128,6 +114,7 @@ function realizarRetiro() {
     inputRetiro.value = '';
 }
 
+// Realizar un depósito
 function realizarDeposito() {
     const inputDeposito = document.getElementById('ideposito');
     const montoDeposito = parseFloat(inputDeposito.value);
@@ -156,6 +143,7 @@ function realizarDeposito() {
     inputDeposito.value = '';
 }
 
+// Realizar un pago
 function realizarPago() {
     const inputNPE = document.getElementById('inpe');
     const inputPagar = document.getElementById('ipagar');
@@ -193,6 +181,7 @@ function realizarPago() {
     inputPagar.value = '';
 }
 
+// Registrar transacciones (retiro o depósito)
 function registrarTransaccion(monto, tipo) {
     const contenedorTransacciones1 = document.getElementById('transacciones1');
     const contenedorTransacciones2 = document.getElementById('transacciones2');
@@ -203,6 +192,7 @@ function registrarTransaccion(monto, tipo) {
     contenedorTransacciones2.innerHTML += `${mensaje}: ${nombreTransaccion} <br>`;
 }
 
+// Registrar transacciones de pago
 function registrarTransaccionPago(monto, npe) {
     const contenedorTransacciones1 = document.getElementById('transacciones1');
     const contenedorTransacciones2 = document.getElementById('transacciones2');
@@ -212,6 +202,7 @@ function registrarTransaccionPago(monto, npe) {
     contenedorTransacciones2.innerHTML += `-$${monto}: ${nombreTransaccion}<br>`;
 }
 
+// Alternar entre ver gráfico y transacciones
 document.querySelector('.consulta2').addEventListener('click', function() {
     var tx1 = document.getElementById('tx1');
     var tx2 = document.getElementById('tx2');
@@ -228,14 +219,17 @@ document.querySelector('.consulta2').addEventListener('click', function() {
     }
 });
 
+// Obtener cuenta
 function obtenercuenta() {
     return document.getElementById('cuenta').innerText;
 }
 
+// Obtener transacciones
 function obtenertransacciones() {
     return document.getElementById('tx1').innerText; 
 }
 
+// Generar reporte general
 function consultageneral() {
     const textcuenta = obtenercuenta();
     const texttransacciones = obtenertransacciones();
@@ -249,6 +243,7 @@ function consultageneral() {
     doc.save("transacciones_"+timestamp+".pdf");
 }
 
+// Imprimir recibo de retiro
 function printRetiro(amount) {
     const textcuenta = obtenercuenta();
     const { jsPDF } = window.jspdf;
@@ -265,6 +260,7 @@ function printRetiro(amount) {
     doc.save("Recibo_Retiro_" + timestamp + ".pdf");
 }
 
+// Imprimir recibo de depósito
 function printDeposito(amount) {
     const textcuenta = obtenercuenta();
     const { jsPDF } = window.jspdf;
@@ -281,6 +277,7 @@ function printDeposito(amount) {
     doc.save("Recibo_Deposito_" + timestamp + ".pdf");
 }
 
+// Imprimir recibo de pago
 function printPago(amount) {
     const textcuenta = obtenercuenta();
     const npe = document.getElementById('inpe').value; 
@@ -300,6 +297,7 @@ function printPago(amount) {
     doc.save("Recibo_Pago_" + timestamp + ".pdf");
 }
 
+// Guardar transacciones en LocalStorage
 function guardarTransaccion(tipo, monto, fecha, npe = null, servicio = null) {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
     if (!loggedInUser.transacciones) {
@@ -326,19 +324,17 @@ function guardarTransaccion(tipo, monto, fecha, npe = null, servicio = null) {
     }
 }
 
-// Esperar a que el DOM esté completamente cargado antes de ejecutar actualizarUI
+// Ejecutar actualizarUI cuando el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
     actualizarUI();
 });
 
-
-
+// Inicializar gráfico de transacciones
 let transactionsChart;
-
 function inicializarGrafico() {
     const ctx = document.getElementById('transactionsChart').getContext('2d');
     if (transactionsChart) {
-        transactionsChart.destroy(); // Destruir el gráfico anterior
+        transactionsChart.destroy(); // Destruir el gráfico anterior si existe
     }
     transactionsChart = new Chart(ctx, {
         type: 'bar',
@@ -362,9 +358,7 @@ function inicializarGrafico() {
         },
         options: {
             scales: {
-                y: {
-                    beginAtZero: true
-                }
+                y: { beginAtZero: true }
             },
             plugins: {
                 legend: {
@@ -376,6 +370,7 @@ function inicializarGrafico() {
     });
 }
 
+// Actualizar gráfico de transacciones
 function actualizarGrafico() {
     if (transactionsChart) {
         transactionsChart.data.labels = fechaarray;
@@ -385,4 +380,3 @@ function actualizarGrafico() {
         inicializarGrafico();
     }
 }
-

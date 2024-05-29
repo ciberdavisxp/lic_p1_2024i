@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATM Interface</title>
+    <!-- Estilos y scripts necesarios -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -42,12 +43,14 @@
                 </div>
             </div>
         </div>
+        <!-- Botones de operaciones -->
         <div class="button-grid">
             <button class="btn btn-primary atm-button" onmouseover="showImage('retiro')">Retiro</button>
             <button class="btn btn-primary atm-button" onmouseover="showImage('deposito')">Depósito</button>
             <button class="btn btn-primary atm-button" onmouseover="showImage('consulta')">Consulta</button>
             <button class="btn btn-primary atm-button" onmouseover="showImage('pagos')">Pagos</button>
         </div>
+        <!-- Contenedor de acciones e imágenes -->
         <div class="image-action-container">
             <img id="infoImage" src="img/movimientos.png" alt="Movimientos" class="info-image show">
             <div class="action-label action-h" id="action" style="display: block;">
@@ -106,21 +109,22 @@
     <div id="transacciones1" class="transacciones"></div>
    
     <script>
+    // Cargar información del usuario al cargar la página
     window.onload = function() {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if (user) {
             document.getElementById('user-name').innerText = user.name;
             document.getElementById('account-number').innerText = user.account;
-            balance = user.balance; // Asegurarse de que el balance se actualice con el del usuario logueado
-            fechaarray = user.transacciones.map(trans => trans.fecha); // Extraer fechas de las transacciones
-            transaccionarray = user.transacciones.map(trans => trans.monto); // Extraer montos de las transacciones
-            actualizarUI(); // Actualizar la UI con el balance correcto
+            balance = user.balance; // Actualizar balance del usuario
+            fechaarray = user.transacciones.map(trans => trans.fecha); // Extraer fechas
+            transaccionarray = user.transacciones.map(trans => trans.monto); // Extraer montos
+            actualizarUI(); // Actualizar UI
         } else {
             alert('No ha iniciado sesión');
-            window.location.href = 'index.html';  // Redirigir al inicio de sesión si no hay usuario logueado
+            window.location.href = 'index.html'; // Redirigir si no hay usuario logueado
         }
     }
     </script>
-
 </body>
 </html>
+
